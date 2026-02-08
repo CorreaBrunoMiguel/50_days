@@ -1,0 +1,53 @@
+{
+  "schema_version": "0.1.0",
+  "course": {
+    "id": "analista_de_dados_em_50_dias",
+    "total_days": 50,
+    "timezone": "America/Sao_Paulo",
+    "weights": {
+      "day_xx": 0.4,
+      "day_xx_gpt": 0.6
+    },
+    "running_average_method": "mean_of_daily_final"
+  },
+  "stats": {
+    "days_completed": 0,
+    "running_average_0_10": null,
+    "last_updated_at": null
+  },
+  "days": {},
+  "day_record_template": {
+    "day_id": "02",
+    "artifacts": {
+      "day_xx": {
+        "score_0_10": 0.0,
+        "breakdown": {
+          "notes": "Opcional. Use quando houver pontuação parcial por questão/etapa."
+        }
+      },
+      "day_xx_gpt": {
+        "score_0_10": 0.0,
+        "breakdown": {
+          "points_total": 0,
+          "points_earned": 0,
+          "steps": [
+            {
+              "step_id": "1",
+              "title": "Título curto da etapa",
+              "points": 0,
+              "earned": 0,
+              "comments": "Comentário objetivo sobre o desempenho nesta etapa"
+            }
+          ]
+        }
+      }
+    },
+    "final": {
+      "score_0_10": 0.0,
+      "formula": "0.40*day_xx + 0.60*day_xx_gpt"
+    },
+    "timestamps": {
+      "graded_at": "YYYY-MM-DDTHH:MM:SS-03:00"
+    }
+  }
+}
