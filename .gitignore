@@ -1,0 +1,111 @@
+# =========================
+# Python / Bytecode
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Jupyter / IPython
+# =========================
+.ipynb_checkpoints/
+.ipython/profile_default/
+profile_default/
+*.nbconvert.ipynb
+
+# (Opcional) Se você usa jupytext e não quer versionar notebooks gerados
+# *.ipynb
+
+# =========================
+# Virtual envs
+# =========================
+.venv/
+venv/
+env/
+ENV/
+pythonenv*/
+pip-wheel-metadata/
+
+# =========================
+# Package managers / builds
+# =========================
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-log.txt
+
+# =========================
+# Test / coverage
+# =========================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+
+# =========================
+# Data science common
+# =========================
+.cache/
+datasets/
+data/
+raw/
+processed/
+interim/
+external/
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.joblib
+
+# Large outputs / exports
+outputs/
+results/
+reports/
+figures/
+plots/
+*.csv
+*.tsv
+*.pdf
+
+# =========================
+# ML artifacts
+# =========================
+mlruns/
+models/
+checkpoints/
+wandb/
+lightning_logs/
+tensorboard/
+tb_logs/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# OS / Editors
+# =========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# =========================
+# Secrets (não versionar)
+# =========================
+.env
+.env.*
+*.key
+*.pem
+secrets/
