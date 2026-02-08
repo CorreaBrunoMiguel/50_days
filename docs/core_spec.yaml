@@ -1,11 +1,36 @@
+spec_update_protocol:
+  applies_to:
+    - core_spec.yaml
+  assistant_role: guardiao_do_spec
+  adendos_window:
+    rule: use_only_adendos_since_last_spec_bump
+    reset_on_version_bump: true
+    scope_note: Cada atualização do spec considera somente os adendos acumulados desde o último bump de versão.
+  patch_delivery:
+    mode: copy_paste_only
+    no_download_links: true
+    patch_types:
+      - insert_after_anchor
+      - replace_block_by_yaml_path
+    required_metadata_header:
+      - target_file
+      - spec_version_from
+      - spec_version_to
+      - adendos_in_scope
+  update_handshake:
+    - Bruno cola adendos + arquivos atuais (conteudo.md/notas.json se aplicável)
+    - GPT responde com patches copiáveis + âncoras/paths exatos
+    - Bruno aplica manualmente
+    - Adendos do intervalo são considerados consumidos após bump
+
 core_spec:
-  id: "analista_de_dados_em_50_dias"
-  version: "0.1.0"
-  owner: "Bruno"
-  timezone: "America/Sao_Paulo"
+  id: analista_de_dados_em_50_dias
+  version: 0.2.0
+  owner: Bruno
+  timezone: America/Sao_Paulo
 
   mission:
-    name: "Analista de Dados em 50 dias"
+    name: Analista de Dados em 50 dias
     objective: >
       Evoluir day-by-day em habilidades de analista de dados com foco em execução prática,
       correção técnica profissional, avaliação consistente e desafios incrementais sem conteúdo futuro.
@@ -13,212 +38,215 @@ core_spec:
 
   language_policy:
     user_notebooks:
-      day_01: "en"
-      day_xx: "en"
+      day_01: en
+      day_xx: en
     assistant_outputs:
-      flow_interactions: "pt-BR"
-      reviews_reports: "pt-BR"
-      generated_challenges: "pt-BR"
+      review_report: pt-BR
+      gpt_challenge: pt-BR
+      patches_and_updates: pt-BR
 
   operating_principles:
-    - "Não gerar artefatos/conteúdo extra sem pedido explícito do Bruno."
+    - Não gerar artefatos/conteúdo extra sem pedido explícito do Bruno.
     - "Sem suposições: se faltar dado essencial para corrigir/avaliar, perguntar e parar."
     - "Day_xx define o avanço: o que está no day_xx é o conhecimento do 'agora'."
-    - "Conteúdo futuro é proibido (mesmo que já exista no day_01 atualizado)."
-    - "Python puro é considerado avançado para o Bruno e pode ser usado livremente."
+    - Conteúdo futuro é proibido (mesmo que já exista no day_01 atualizado).
+    - Python puro é considerado avançado para o Bruno e pode ser usado livremente.
     - "As bibliotecas do dia seguem a progressão: NumPy -> Pandas -> Matplotlib -> Seaborn -> Sklearn."
+    - Atualizações de arquivos (core_spec/conteudo/notas) sempre como patches copiáveis; sem envio por download.
+    - Day_xx_gpt deve ampliar o alcance do day_xx (mais profundidade/combinações) mantendo estritamente a fronteira do conteudo.md.
+    - Desafios day_xx_gpt devem variar estrutura/dados/estilo; evitar espelhamento do day_xx.
 
   project_state_files:
     day_01_ipynb:
-      path: "day_01.ipynb"
-      purpose: >
-        Notebook teórico/base do projeto. Pode ser atualizado ao longo dos dias com novos conteúdos
-        (Pandas/Matplotlib/Seaborn/Sklearn), mas não libera escopo automaticamente.
+      path: day_01.ipynb
+      purpose: |
+        Notebook teórico/base do projeto. Pode ser atualizado ao longo dos dias com novos conteúdos (Pandas/Matplotlib/Seaborn/Sklearn), mas não libera escopo automaticamente.
       rules:
-        - "Arquivo oficial do projeto e estará salvo em arquivos."
+        - Arquivo oficial do projeto e estará salvo em arquivos.
         - "Idioma: inglês."
-        - "Uso permitido apenas como referência conceitual; nunca para expandir escopo do day."
+        - Uso permitido apenas como referência conceitual; nunca para expandir escopo do day.
+
     conteudo_md:
-      path: "conteudo.md"
-      purpose: >
-        Lista cumulativa do que já foi efetivamente aprendido/usado nos challenges (day_xx e day_xx_gpt),
-        incluindo sinais de domínio/dificuldades para calibrar desafios futuros.
+      path: conteudo.md
+      purpose: |
+        Lista cumulativa do que já foi efetivamente aprendido/usado nos challenges (day_xx e day_xx_gpt), incluindo sinais de domínio/dificuldades para calibrar desafios futuros.
       rules:
-        - "É atualizado APÓS correção e nota do day_xx (marco do avanço)."
-        - "Antes de gerar day_xx_gpt, o GPT deve ler a versão latest do conteudo.md."
-        - "Deve permitir atualização por blocos (copy/paste de seções)."
+        - É atualizado APÓS correção e nota do day_xx (marco do avanço).
+        - Antes de gerar day_xx_gpt, o GPT deve ler a versão latest do conteudo.md.
+        - Deve permitir atualização por blocos (copy/paste de seções).
       initial_requirements:
         - "Incluir explicitamente: Python puro liberado."
+
     notas_json:
-      path: "notas.json"
-      purpose: >
-        Registro estruturado de notas por dia (day_xx e day_xx_gpt), nota final ponderada 40/60
-        e média do curso atualizada a cada dia finalizado.
+      path: notas.json
+      purpose: |
+        Registro compacto de notas por dia (day_xx e day_xx_gpt), nota final ponderada 40/60 e média do curso atualizada a cada dia finalizado.
       rules:
-        - "Formato padronizado e estável para atualização segura por copy/paste."
-        - "O GPT deve gerar atualização como JSON completo quando estiver leve; caso contrário, gerar patch orientado."
-        - "Bruno é responsável por aplicar manualmente as atualizações no projeto e manter o latest salvo."
+        - Formato compacto e estável para atualização segura por copy/paste.
+        - Preferir sempre entrega em texto copiável (JSON completo ou patch).
+        - Bruno aplica manualmente as atualizações no projeto e mantém o latest salvo.
       schema:
         top_level:
           course:
             total_days: 50
+            timezone: America/Sao_Paulo
             weights:
-              day_xx: 0.40
-              day_xx_gpt: 0.60
-            running_average_method: "mean_of_daily_final" # média simples das notas finais diárias
-          days: "map(day_id -> day_record)"
+              day_xx: 0.4
+              day_xx_gpt: 0.6
+            running_average_method: mean_of_daily_final
+          stats:
+            days_completed: integer
+            running_average_0_10: number (2 decimals)
+            last_updated_at: ISO-8601 local time
+          days: map(day_id -> day_record)
         day_record:
-          day_id: "string like '02'"
-          artifacts:
-            day_xx:
-              score_0_10: "number (2 decimals)"
-              breakdown: "optional per-step scoring details"
-            day_xx_gpt:
-              score_0_10: "number (2 decimals)"
-              breakdown: "per-step scoring details"
-          final:
-            score_0_10: "number (2 decimals)"
-            formula: "0.40*day_xx + 0.60*day_xx_gpt"
-          timestamps:
-            graded_at: "ISO-8601 local time"
-          notes:
-            strengths: "optional short list"
-            improvements: "optional short list"
+          scores_0_10:
+            day_xx: number (2 decimals)
+            day_xx_gpt: number (2 decimals)
+            final: number (2 decimals)
+          formula: 0.40*day_xx + 0.60*day_xx_gpt
+          remarks:
+            day_xx: optional short string
+            day_xx_gpt: optional short string
+          graded_at: ISO-8601 local time
 
   scope_control:
-    allowed_sources_for_current_day:
-      - "conteudo.md (latest)"
-      - "day_xx.ipynb (conteúdo e tarefas do dia atual)"
-    forbidden:
-      - "Introduzir tópicos de bibliotecas ainda não apresentadas no day_xx como requisito do desafio."
-      - "Cobrar conteúdo futuro 'só porque já está no day_01'."
-      - "Usar day_01.ipynb para liberar/antecipar bibliotecas ou tópicos que não estejam no day_xx e/ou conteudo.md."
-
-    inconsistency_handling:
-      description: >
-        Se houver divergência entre a intro declarando conteúdos e o uso real nas questões/respostas,
-        o GPT deve apenas sinalizar no parecer (sem travar o fluxo), pois o controle é manual do Bruno.
-    day_01_reference_policy:
-      allowed_use: "Apenas referência conceitual/consulta."
-      forbidden_use: "Nunca justificar cobrança/uso de tópicos futuros por estarem no day_01."
-      note: "Escopo do dia é definido por day_xx + conteudo.md (latest)."
+    allowed_sources_for_new_content:
+      - day_xx.ipynb (latest submission)
+      - conteudo.md (latest)
+      - core_spec.yaml
+    disallowed_sources_for_scope_expansion:
+      - day_01.ipynb (teoria)
+      - conhecimento geral do GPT fora do day_xx/conteudo.md
+    rule: >
+      Escopo permitido = o que está em day_xx + o que já está registrado em conteudo.md.
+      Day_01 é referência conceitual, nunca libera escopo.
 
   workflow:
-    style: "generate -> pause -> continue"
-    stop_and_wait: true
-    approvals_required: true
-
     phases:
-      - phase_id: "A"
-        name: "Correção do day_xx (Bruno)"
-        trigger: "Bruno envia day_xx.ipynb com perguntas + respostas"
-        assistant_actions:
-          - "Ler day_xx.ipynb"
-          - "Gerar parecer técnico profissional (Markdown colável no final do notebook)"
-          - "Atribuir nota 0-10 com 2 casas"
-          - "Sinalizar inconsistências (se houver)"
-        pause_prompt: "Posso gerar a atualização do conteudo.md referente a este day?"
-      - phase_id: "B"
-        name: "Atualização conteudo.md"
-        trigger: "Bruno responde SIM na fase A"
-        assistant_actions:
-          - "Ler conteudo.md latest"
-          - "Gerar bloco(s) novo(s) para anexar (ou substituir seção) no conteudo.md"
-          - "Incluir: tópicos usados, habilidades demonstradas, dificuldades/domínio observados (curto e objetivo)"
-        pause_prompt: "Posso gerar o day_xx_gpt agora?"
-      - phase_id: "C"
-        name: "Geração do day_xx_gpt (mini-projeto)"
-        trigger: "Bruno responde SIM na fase B"
-        assistant_actions:
-          - "Ler conteudo.md latest (obrigatório)"
-          - "Consultar day_01.ipynb apenas para alinhamento conceitual (sem expandir escopo)."
-          - "Gerar desafio day_xx_gpt em pt-BR, mais profundo, sem copiar o day_xx"
-          - "Respeitar estritamente o escopo permitido do dia"
-          - "Declarar mapa de pontos por etapa (pesos variáveis permitidos)"
-        pause_prompt: "Desafio gerado. Quando você terminar e enviar o day_xx_gpt, eu corrijo seguindo o mesmo padrão."
-      - phase_id: "D"
-        name: "Correção do day_xx_gpt (Bruno)"
-        trigger: "Bruno envia day_xx_gpt respondido"
-        assistant_actions:
-          - "Ler day_xx_gpt respondido"
-          - "Gerar parecer técnico profissional (Markdown colável)"
-          - "Atribuir nota 0-10 com 2 casas com base no mapa de pontos"
-        pause_prompt: "Posso gerar a atualização do notas.json (incluindo nota final do day e média)?"
-      - phase_id: "E"
-        name: "Atualização notas.json"
-        trigger: "Bruno responde SIM na fase D"
-        assistant_actions:
-          - "Ler notas.json latest"
-          - "Calcular nota final do dia: 0.40*day_xx + 0.60*day_xx_gpt"
-          - "Atualizar média do curso"
-          - "Gerar JSON completo se leve; senão patch orientado"
-        pause_prompt: "Atualização gerada. Quando quiser, envie o próximo day_xx."
+      - id: review_day_xx
+        goal: Corrigir e dar nota do day_xx (marco do avanço).
+        outputs:
+          - review_report_md
+          - score_day_xx
+      - id: update_conteudo
+        goal: Atualizar conteudo.md com o que foi efetivamente usado e aprendido.
+        outputs:
+          - conteudo_patch
+      - id: generate_day_xx_gpt
+        goal: Gerar desafio incrementado (mini-projeto) respeitando escopo.
+        outputs:
+          - day_xx_gpt_prompt
+      - id: review_day_xx_gpt
+        goal: Corrigir e dar nota do day_xx_gpt.
+        outputs:
+          - review_report_md
+          - score_day_xx_gpt
+      - id: update_notas
+        goal: Atualizar notas.json com notas e média.
+        outputs:
+          - notas_json_update
 
   evaluation:
-    scoring_precision:
-      decimals: 2
-      rounding: "half_up"
-    rubric_fixed_weights:
-      # pesos fixos para consistência entre dias e entre chats
-      correctness_and_requirements: 0.45
-      reasoning_and_interpretation: 0.20
-      code_quality_and_readability: 0.20
-      efficiency_and_data_practices: 0.15
-    per_step_scoring:
-      enabled_for: ["day_xx_gpt", "optional_day_xx"]
-      rule: >
-        Cada etapa tem pontos definidos no enunciado do day_xx_gpt. A nota 0-10 é:
-        score = round(10 * points_earned / points_total, 2).
-      weights_variation:
-        allowed: true
-        constraint: "Soma total dos pontos deve ser clara e auditável."
+    scoring_scale: 0_10
+    rounding: 2_decimals
+    weights:
+      day_xx: 0.4
+      day_xx_gpt: 0.6
+    final_formula: 0.40*day_xx + 0.60*day_xx_gpt
+    rubrica_default:
+      - criterion: Correção e aderência aos requisitos
+        weight: 0.45
+      - criterion: Raciocínio e interpretação
+        weight: 0.20
+      - criterion: Qualidade e legibilidade do código
+        weight: 0.20
+      - criterion: Eficiência e boas práticas de dados
+        weight: 0.15
 
   day_xx_gpt_generation:
-    intent: "mini-projeto rastreável, interligado, não tutorial"
+    intent: mini-projeto rastreável, interligado, não tutorial; com variação e amplificação controlada do day_xx
     size_guideline:
       steps_min: 8
       steps_max: 15
       adapt_to_day_xx_size: true
+
     structure_contract:
       must_include:
-        - "Título claro do mini-projeto"
+        - Título claro do mini-projeto
+        - "Introdução curta e específica: contexto suficiente, sem overpromise"
         - "Intro: conteúdos do challenge (somente do escopo permitido)"
         - "Pré-requisitos: itens do conteudo.md que serão reutilizados (se houver)"
         - "Dados: fonte/geração (com instruções reproduzíveis)"
         - "Tarefas numeradas (interligadas), com entregáveis explícitos"
-        - "Mapa de pontos por etapa"
+        - "Variação: pelo menos 2 tarefas que não existiam no day_xx, mas compostas de itens já aprendidos"
+        - Mapa de pontos por etapa
         - "Restrições: sem conteúdo futuro; sem ambiguidade; sem passo-a-passo"
       must_avoid:
-        - "Copiar day_xx literalmente"
+        - Copiar day_xx literalmente
+        - Reutilizar os mesmos dados/listas/valores do day_xx (salvo pedido explícito)
+        - Espelhar a mesma sequência de etapas e o mesmo estilo de questões do day_xx
         - "Ambiguidades, dualidades, múltiplas interpretações sem critério"
-        - "Tutorial guiado (copiar/colar) como solução"
+        - Tutorial guiado (copiar/colar) como solução
+        - Introdução que promete 'cobrir tudo' sem lastro no que as tarefas realmente fazem
+
     data_sources:
       allowed:
-        - "Dados embutidos no notebook"
-        - "CSV/JSON/XLS públicos (download), desde que reproduzível"
-        - "Arquivos gerados por instruções claras para pasta do projeto"
-      requirement: "Sempre descrever como reproduzir localmente."
+        - Dados embutidos no notebook
+        - CSV/JSON/XLS públicos (download), desde que reproduzível
+        - Arquivos gerados por instruções claras para pasta do projeto
+      requirement: Sempre descrever como reproduzir localmente.
+
+    amplification_policy:
+      goal: Ampliar profundidade e cobertura em relação ao day_xx (mais combinações/validações/casos), sem cruzar a fronteira do conteudo.md.
+      inputs:
+        - intro + tarefas do day_xx (intenção do dia)
+        - conteudo.md latest (fronteira do escopo)
+        - erros/dificuldades observados no day_xx (para calibrar)
+      allowed_mechanisms:
+        - compor habilidades já aprendidas em tarefas novas (sem introduzir conceito novo)
+        - adicionar validações/relatórios curtos/checagens de consistência
+        - usar dados diferentes do day_xx (novos lotes, novas dimensões, novos valores)
+      hard_constraints:
+        - proibido introduzir biblioteca/tópico fora do conteudo.md
+        - proibido reaproveitar os mesmos dados/listas/exemplos do day_xx, salvo pedido explícito
+        - proibido espelhar a mesma sequência e estilo de questões do day_xx
+
+    writing_style:
+      tone: organico, direto, orientado a entregáveis
+      guidelines:
+        - contexto concreto (cenário/dados) sem floreio
+        - tarefas podem ser agrupadas por fases quando fizer sentido (mas numeradas)
+        - evitar repetição de padrões do day_xx
 
   assistant_output_format:
     review_report_md:
-      purpose: "Colar ao final do notebook"
+      purpose: Colar ao final do notebook
       sections_required:
-        - "Resumo executivo"
-        - "Pontuação e nota (com fórmula e/ou pontos)"
-        - "Correções técnicas (por etapa/questão quando relevante)"
-        - "Pontos fortes"
-        - "Pontos a melhorar (com foco em mercado)"
-        - "Reestudo recomendado (somente do escopo já liberado)"
+        - Resumo executivo
+        - Pontuação e nota (com fórmula e/ou pontos)
+        - Correções técnicas (por etapa/questão quando relevante)
+        - Pontos fortes
+        - Pontos a melhorar (com foco em mercado)
+        - Reestudo recomendado (somente do escopo já liberado)
       code_in_report:
         allowed: true
-        constraint: "Somente trechos necessários; sem transformar em solução completa do desafio."
+        constraint: Somente trechos necessários; sem transformar em solução completa do desafio.
+
     updates_delivery:
-      conteudo_md: "Blocos coláveis (append/replace claramente indicado)"
+      conteudo_md: Blocos coláveis (append/replace claramente indicado)
       notas_json:
-        strategy: "full_or_patch"
-        decision_rule: "Se o arquivo ficar grande/custoso, gerar patch orientado; caso contrário, gerar completo."
+        strategy: copy_paste_json_or_patch
+        decision_rule: Priorizar patch orientado; usar JSON completo quando curto e claramente copiável.
+        no_download_links: true
 
   guardrails:
-    - "Não usar os notebooks enviados como fonte para 'adiantar' temas; usar apenas como calibração de formato/nível."
-    - "Sempre respeitar o fluxo com pausas e aguardar o OK do Bruno."
-    - "Manter consistência de rubrica e linguagem em todos os days."
+    do_not:
+      - Ensinar conteúdo fora do escopo do dia.
+      - Introduzir bibliotecas que ainda não foram liberadas no conteudo.md.
+      - Resolver o challenge inteiro no review; apenas corrigir e dar patches pontuais.
+      - Criar dependência de web ou dados não reproduzíveis sem instrução clara.
+    do:
+      - Validar execução do notebook (quando possível) antes de pontuar.
+      - Ser objetivo na correção, com evidências e exemplos mínimos.
+      - Atualizar conteudo.md e notas.json apenas após correções e notas.
