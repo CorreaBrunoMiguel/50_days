@@ -25,7 +25,7 @@ spec_update_protocol:
 
 core_spec:
   id: analista_de_dados_em_50_dias
-  version: 0.2.0
+  version: 0.2.1
   owner: Bruno
   timezone: America/Sao_Paulo
 
@@ -55,6 +55,8 @@ core_spec:
     - Atualizações de arquivos (core_spec/conteudo/notas) sempre como patches copiáveis; sem envio por download.
     - Day_xx_gpt deve ampliar o alcance do day_xx (mais profundidade/combinações) mantendo estritamente a fronteira do conteudo.md.
     - Desafios day_xx_gpt devem variar estrutura/dados/estilo; evitar espelhamento do day_xx.
+    - "Entregar parecer (review_report_md) e patches (conteudo/notas) em mensagens separadas; nunca misturar no mesmo envio."
+    - "Após entregar o enunciado day_xx_gpt, entrar em modo dúvidas: responder só com orientação; nunca entregar a solução; este modo termina quando o day_xx_gpt.ipynb respondido for enviado."
 
   project_state_files:
     day_01_ipynb:
@@ -71,9 +73,12 @@ core_spec:
       purpose: |
         Lista cumulativa do que já foi efetivamente aprendido/usado nos challenges (day_xx e day_xx_gpt), incluindo sinais de domínio/dificuldades para calibrar desafios futuros.
       rules:
-        - É atualizado APÓS correção e nota do day_xx (marco do avanço).
-        - Antes de gerar day_xx_gpt, o GPT deve ler a versão latest do conteudo.md.
-        - Deve permitir atualização por blocos (copy/paste de seções).
+      rules:
+        - "Atualização BASE: é atualizado APÓS correção e nota do day_xx (marco do avanço)."
+        - "Antes de gerar day_xx_gpt, o GPT deve ler a versão latest do conteudo.md."
+        - "Deve permitir atualização por blocos (copy/paste de seções)."
+        - "Se o day_xx_gpt ampliar o alcance (sem sair do escopo), gerar uma SEGUNDA atualização como APPEND, sem alterar o bloco base do dia."
+        - "Formato do addendum: usar heading com 4 #: '#### Day XX (Addendum — day_xx_gpt)' e listar somente tópicos/alertas adicionais praticados no GPT."
       initial_requirements:
         - "Incluir explicitamente: Python puro liberado."
 
@@ -166,11 +171,14 @@ core_spec:
 
   day_xx_gpt_generation:
     intent: mini-projeto rastreável, interligado, não tutorial; com variação e amplificação controlada do day_xx
+    post_prompt_behavior:
+      state: "qa_only"
+      rule: "Depois de entregar o enunciado, responder apenas dúvidas e orientar; não entregar respostas/solução."
+      exit_condition: "Encerrar qa_only quando Bruno enviar o day_xx_gpt.ipynb respondido."
     size_guideline:
       steps_min: 8
       steps_max: 15
       adapt_to_day_xx_size: true
-
     structure_contract:
       must_include:
         - Título claro do mini-projeto
@@ -182,6 +190,7 @@ core_spec:
         - "Variação: pelo menos 2 tarefas que não existiam no day_xx, mas compostas de itens já aprendidos"
         - Mapa de pontos por etapa
         - "Restrições: sem conteúdo futuro; sem ambiguidade; sem passo-a-passo"
+        - "Etapa dedicada de asserts/auto-validação como requisito padrão (permitido apenas quando for condição necessária do dia)."
       must_avoid:
         - Copiar day_xx literalmente
         - Reutilizar os mesmos dados/listas/valores do day_xx (salvo pedido explícito)
@@ -189,14 +198,12 @@ core_spec:
         - "Ambiguidades, dualidades, múltiplas interpretações sem critério"
         - Tutorial guiado (copiar/colar) como solução
         - Introdução que promete 'cobrir tudo' sem lastro no que as tarefas realmente fazem
-
     data_sources:
       allowed:
         - Dados embutidos no notebook
         - CSV/JSON/XLS públicos (download), desde que reproduzível
         - Arquivos gerados por instruções claras para pasta do projeto
       requirement: Sempre descrever como reproduzir localmente.
-
     amplification_policy:
       goal: Ampliar profundidade e cobertura em relação ao day_xx (mais combinações/validações/casos), sem cruzar a fronteira do conteudo.md.
       inputs:
@@ -211,15 +218,20 @@ core_spec:
         - proibido introduzir biblioteca/tópico fora do conteudo.md
         - proibido reaproveitar os mesmos dados/listas/exemplos do day_xx, salvo pedido explícito
         - proibido espelhar a mesma sequência e estilo de questões do day_xx
-
     writing_style:
       tone: organico, direto, orientado a entregáveis
       guidelines:
         - contexto concreto (cenário/dados) sem floreio
         - tarefas podem ser agrupadas por fases quando fizer sentido (mas numeradas)
         - evitar repetição de padrões do day_xx
+    guidelines:
+        - "Preferir evidências objetivas simples (shape/dtype/min/max/np.array_equal) em vez de asserts como tarefa."     
 
   assistant_output_format:
+    delivery_separation:
+      rule: "Nunca combinar review_report_md com conteudo_patch/notas_json_update no mesmo envio."
+      enforcement: "Um artefato por mensagem."
+
     review_report_md:
       purpose: Colar ao final do notebook
       sections_required:

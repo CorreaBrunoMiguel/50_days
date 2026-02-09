@@ -11,9 +11,9 @@
     "running_average_method": "mean_of_daily_final"
   },
   "stats": {
-    "days_completed": 1,
-    "running_average_0_10": 8.11,
-    "last_updated_at": "2026-02-08T00:00:00-03:00"
+    "days_completed": 2,
+    "running_average_0_10": 8.0,
+    "last_updated_at": "2026-02-09T00:00:00-03:00"
   },
   "days": {
     "02": {
@@ -28,6 +28,19 @@
         "day_xx_gpt": "Auditoria de 2D/3D: usou len() em vez de arr.size; faltou report/describe_array no formato pedido; resposta conceitual começou contradizendo o próprio exemplo."
       },
       "graded_at": "2026-02-08T00:00:00-03:00"
+    },
+    "03": {
+      "scores_0_10": {
+        "day_xx": 8.48,
+        "day_xx_gpt": 7.5,
+        "final": 7.89
+      },
+      "formula": "0.40*day_xx + 0.60*day_xx_gpt",
+      "remarks": {
+        "day_xx": "Q2: intervalo de inteiros não seguiu exatamente o enunciado (high exclusivo em rng.integers).",
+        "day_xx_gpt": "Perdas: range em rng.integers (0..5 inclusive), auditoria (dtype como string + mapeamento de chaves) e ausência de validação final do entregável."
+      },
+      "graded_at": "2026-02-09T00:00:00-03:00"
     }
   },
   "day_record_template": {

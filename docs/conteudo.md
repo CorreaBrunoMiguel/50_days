@@ -83,3 +83,44 @@ Regras operacionais:
   - Incentivar escolhas idiomáticas (`arr.size`, evitar `np.array()` redundante ao retornar slicing)
 
 ---
+
+### Day 03
+
+- Bibliotecas/escopo do dia:
+  - NumPy
+  - Matplotlib (uso mínimo: histograma)
+- Tópicos usados:
+  - RNG moderno e reprodutível: `np.random.default_rng(seed=...)`
+  - Uniforme em [0, 1): `rng.random(size=...)`
+  - Inteiros: `rng.integers(low, high, size=...)` (nota: `high` é exclusivo)
+  - Normal padrão: `rng.standard_normal(n)`
+  - Amostragem por escolha: `rng.choice(itens, size=..., replace=...)`
+  - Visualização mínima: `plt.hist(...)` + `plt.show()`
+- Habilidades demonstradas:
+  - Gerar arrays aleatórios com shape definido e seed
+  - Produzir histograma simples para inspeção de distribuição
+  - Gerar amostras categóricas a partir de um conjunto
+- Dificuldades/alertas observados:
+  - Limites em `rng.integers`: confusão de inclusive/exclusivo no parâmetro `high`
+- Observações de calibragem (para próximos desafios):
+  - Sempre validar range pedido com `min/max` quando for requisito
+  - Checar `shape`/`dtype` dos arrays gerados quando solicitado
+
+---
+
+#### Day 03 (Addendum — day_03_gpt)
+
+- Ampliação praticada (mantendo o escopo do Day 03):
+  - Reprodutibilidade forte com `default_rng`: duas instâncias com o mesmo seed geram arrays idênticos (prova por igualdade)
+  - Transformação aritmética de uniforme: `rng.random` em [0,1) → escala + deslocamento para [a,b)
+  - Inteiros com faixa controlada e validação objetiva do range (reforço do `high` exclusivo)
+  - Composição 2D misturando floats e ints e evidência de promoção de tipo (`dtype` → float)
+  - Casting para `int64` e evidência de truncamento (float → int)
+  - Amostragem categórica via `rng.choice` com códigos numéricos (matriz 2D)
+  - Separação de “fontes de aleatoriedade” por seed (SEED_A vs SEED_B) para ruído
+
+- Dificuldades/alertas observados no day_03_gpt:
+  - Range em `rng.integers`: ajuste fino do “inclusive/exclusivo” ainda oscilou
+  - Auditoria: cuidados com `dtype` como string e mapeamento correto das chaves (evitar erro de concatenação por falta de vírgula)
+
+---
