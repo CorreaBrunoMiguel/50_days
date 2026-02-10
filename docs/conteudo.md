@@ -124,3 +124,55 @@ Regras operacionais:
   - Auditoria: cuidados com `dtype` como string e mapeamento correto das chaves (evitar erro de concatenação por falta de vírgula)
 
 ---
+
+### Day 04
+
+- Bibliotecas/escopo do dia:
+  - NumPy
+  - Matplotlib (histograma + scatter 3D)
+
+- Tópicos usados:
+  - RNG reprodutível com `np.random.default_rng(seed=...)`
+  - Geração de inteiros com `rng.integers(low, high, size=...)` (high exclusivo)
+  - Broadcasting em operações vetorizadas: `np.add(arr1, arr2)` com shapes (2,3) e (1,3)
+  - Produto vetorial/matricial: `np.dot(...)` com uso de transpose para compatibilizar shapes
+  - Histograma de inteiros discretos com `plt.hist` e bins alinhados (via `np.arange`)
+  - Estatística discreta: média (`arr.mean()`), contagem por valor com `np.bincount`, moda via `argmax`
+  - Array 3D com `rng.random(shape)` e visualização 3D usando índices (`np.indices`) + `ravel` + `scatter`
+  - Flatten/consulta de não-zero: `np.flatnonzero` (retorna índices)
+
+- Habilidades demonstradas:
+  - Aplicar broadcasting corretamente e interpretar o shape resultante
+  - Executar dot product ajustando dimensões com transpose
+  - Construir histograma coerente para dados inteiros discretos
+  - Extrair moda com abordagem eficiente (`bincount + argmax`)
+  - Preparar dados de um volume 3D para plot 3D (índices + valores)
+
+- Dificuldades/alertas observados:
+  - Limites em `rng.integers`: faixa “10..20” ficou desalinhada por escolha de `low/high`
+  - Estatística pedida vs entregue: mediana foi solicitada e não calculada
+  - Não-zero: uso de `flatnonzero` retorna índices, não os valores não-zero
+
+- Observações de calibragem (para próximos desafios):
+  - Sempre explicitar a interpretação do range (inclusive/exclusivo) e validar com `min/max`
+  - Diferenciar “índices” vs “valores” ao filtrar arrays (máscara vs `flatnonzero`)
+  - Quando houver estatística descritiva, garantir que a métrica pedida foi de fato calculada
+
+---
+
+#### Day 04 (Addendum — day_04_gpt)
+
+- Ampliação praticada (sem sair do escopo do Day 04):
+  - Transformação aritmética de uniforme: `rng.random` em [0,1) → escala + deslocamento para uma faixa alvo ([50,70))
+  - Calibração por broadcasting com offsets negativos em shape (1, n) aplicado sobre matriz (m, n)
+  - Pipeline “calibrated → score”: vetor de pesos (`standard_normal`) + produto matricial (`@`) gerando score 1D
+  - Estatística aplicada ao score: mediana + “modo” via discretização (`astype(int64)`) e contagem (`bincount`) com cuidado para valores negativos (shift)
+  - Log esparso gerado via `choice` com pool enviesado a zeros, com extração separada de:
+    - valores não-zero (máscara)
+    - posições (ex.: `argwhere`)
+
+- Dificuldades/alertas observados no day_04_gpt:
+  - Moda com `bincount` em dados discretizados negativos: precisa deslocar para não-negativo; `abs` não preserva corretamente a moda original
+  - Evidências: qualquer forma que “apareça na saída” vale (print ou última expressão da célula); padronizar isso para evitar ruído de correção
+
+---

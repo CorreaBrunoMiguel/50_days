@@ -25,7 +25,7 @@ spec_update_protocol:
 
 core_spec:
   id: analista_de_dados_em_50_dias
-  version: 0.2.1
+  version: 0.2.2
   owner: Bruno
   timezone: America/Sao_Paulo
 
@@ -188,16 +188,20 @@ core_spec:
         - "Dados: fonte/geração (com instruções reproduzíveis)"
         - "Tarefas numeradas (interligadas), com entregáveis explícitos"
         - "Variação: pelo menos 2 tarefas que não existiam no day_xx, mas compostas de itens já aprendidos"
+        - "Etapa final (capstone): entrega agregada/diagnóstico/resumo (não vale ser só 'imprimir valores')"
         - Mapa de pontos por etapa
         - "Restrições: sem conteúdo futuro; sem ambiguidade; sem passo-a-passo"
-        - "Etapa dedicada de asserts/auto-validação como requisito padrão (permitido apenas quando for condição necessária do dia)."
       must_avoid:
         - Copiar day_xx literalmente
         - Reutilizar os mesmos dados/listas/valores do day_xx (salvo pedido explícito)
         - Espelhar a mesma sequência de etapas e o mesmo estilo de questões do day_xx
+        - "Checklist final via asserts como etapa/pontuação (permitido apenas se for condição necessária do dia)"
+        - "Tarefas do tipo 'copie/rode/observe' como maioria do desafio; cada tarefa deve exigir uma decisão ou composição"
+        - "Auditoria genérica repetida como etapa isolada (ex.: audit(arr) com shape/size/ndim/dtype) em dias consecutivos; quando necessária, variar o formato ou embutir no capstone"
+        - "Repetir o mesmo esqueleto de tarefas (setup -> gerar -> hist -> audit) mudando apenas números/contexto"
         - "Ambiguidades, dualidades, múltiplas interpretações sem critério"
         - Tutorial guiado (copiar/colar) como solução
-        - Introdução que promete 'cobrir tudo' sem lastro no que as tarefas realmente fazem
+        - "Introdução que promete 'cobrir tudo' sem lastro no que as tarefas realmente fazem"    
     data_sources:
       allowed:
         - Dados embutidos no notebook
@@ -218,13 +222,24 @@ core_spec:
         - proibido introduzir biblioteca/tópico fora do conteudo.md
         - proibido reaproveitar os mesmos dados/listas/exemplos do day_xx, salvo pedido explícito
         - proibido espelhar a mesma sequência e estilo de questões do day_xx
+    anti_repetition_policy:
+      window_days: 2
+      required_novelty:
+        min_new_task_patterns: 3
+        note: "Padrão novo = tarefa cujo entregável/forma difere de 'gerar array -> imprimir propriedades'."
+      hard_rules:
+        - "Não repetir a mesma tarefa de auditoria (mesma função + mesmo output) em dias consecutivos."
+        - "Se o day_xx for curto, o day_xx_gpt deve ampliar por composição (pipeline) ou depuração/diagnóstico, não por duplicação de exercícios."
+      examples_of_novelty:
+        - "depurar um snippet propositalmente incorreto (range/dtype/shape) e produzir correção mínima"
+        - "construir um pipeline curto (gerar->transformar->agregar->relatar) com 1 artefato final"
+        - "comparar duas abordagens do mesmo escopo (ex.: broadcasting vs reshape) e justificar com shape/dtype"    
     writing_style:
       tone: organico, direto, orientado a entregáveis
       guidelines:
         - contexto concreto (cenário/dados) sem floreio
         - tarefas podem ser agrupadas por fases quando fizer sentido (mas numeradas)
         - evitar repetição de padrões do day_xx
-    guidelines:
         - "Preferir evidências objetivas simples (shape/dtype/min/max/np.array_equal) em vez de asserts como tarefa."     
 
   assistant_output_format:
@@ -241,6 +256,11 @@ core_spec:
         - Pontos fortes
         - Pontos a melhorar (com foco em mercado)
         - Reestudo recomendado (somente do escopo já liberado)
+      evidence_rule:
+        accepted:
+          - "print(...)"
+          - "expressão como última linha da célula (Jupyter) exibindo o valor"
+        note: "Se a evidência aparece na saída do notebook por qualquer um dos meios acima, conta como prova."      
       code_in_report:
         allowed: true
         constraint: Somente trechos necessários; sem transformar em solução completa do desafio.

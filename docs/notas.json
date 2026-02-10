@@ -11,9 +11,9 @@
     "running_average_method": "mean_of_daily_final"
   },
   "stats": {
-    "days_completed": 2,
-    "running_average_0_10": 8.0,
-    "last_updated_at": "2026-02-09T00:00:00-03:00"
+    "days_completed": 3,
+    "running_average_0_10": 8.26,
+    "last_updated_at": "2026-02-10T00:00:00-03:00"
   },
   "days": {
     "02": {
@@ -41,6 +41,19 @@
         "day_xx_gpt": "Perdas: range em rng.integers (0..5 inclusive), auditoria (dtype como string + mapeamento de chaves) e ausência de validação final do entregável."
       },
       "graded_at": "2026-02-09T00:00:00-03:00"
+    },
+    "04": {
+      "scores_0_10": {
+        "day_xx": 7.84,
+        "day_xx_gpt": 9.4,
+        "final": 8.78
+      },
+      "formula": "0.40*day_xx + 0.60*day_xx_gpt",
+      "remarks": {
+        "day_xx": "Q1: faixa de rng.integers desalinhada (high exclusivo). Q4: mediana pedida, mas foi calculada média. Q6: retornou índices (flatnonzero) em vez de valores não-zero.",
+        "day_xx_gpt": "Tudo ok exceto 'modo' discretizado com negativos (bincount exige shift). Evidências: expressão como última linha da célula conta como prova, equivalente a print."
+      },
+      "graded_at": "2026-02-10T00:00:00-03:00"
     }
   },
   "day_record_template": {
